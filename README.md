@@ -1,5 +1,25 @@
 ## Foundry
 
+
+```
+USDC/USD	0x1173da1811a311234e7Ab0A33B4B7B646Ff42aEC
+USDT/USD	0x0bd446021Ab95a2ABd638813f9bDE4fED3a5779a
+GNO/USD	0xA28dCaB66FD25c668aCC7f232aa71DA1943E04b8
+ETH/USD	0xc8A1F9461115EF3C1E84Da6515A88Ea49CA97660
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
 
 Foundry consists of:
