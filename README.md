@@ -1,4 +1,6 @@
-## Foundry
+## PAYTAL
+
+Chronicles Oracles
 
 
 ```
@@ -28,6 +30,8 @@ ETH/USD	0xc8A1F9461115EF3C1E84Da6515A88Ea49CA97660
 
 
 forge create --rpc-url https://rpc.gnosischain.com --constructor-args "0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83" "0x6A023CCd1ff6F2045C3309768eAd9E68F978f6e1" "0x9C58BAcC331c9aa871AFD802DB6379a98e80CEdb" "0x1173da1811a311234e7Ab0A33B4B7B646Ff42aEC" "0xc8A1F9461115EF3C1E84Da6515A88Ea49CA97660" "0xA28dCaB66FD25c668aCC7f232aa71DA1943E04b8" --private-key <private-key> src/PaytalLisbon.sol:PaytalLisbon
+
+## Contract deployed in Gnosis chain
 
 https://gnosisscan.io/address/0x8D664Ad52a566F94b1509be7F5293e125A04b872#readContract
 
