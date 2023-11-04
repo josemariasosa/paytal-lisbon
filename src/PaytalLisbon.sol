@@ -13,14 +13,12 @@ enum Currency {
 }
 
 struct Coin {
-    uint256 amount;
-    Currency currency;
+    uint256 amountInCoin;
+    uint256 amountInUsd;
 }
 
 contract PaytalLisbon {
 
-    uint256[3] TEST_DATA = [999_998, 1 ether, 1 ether];
-    
     uint constant public TOTAL_CURRENCIES = 3;
 
     mapping (Currency => address) tokenAddress;
@@ -52,18 +50,25 @@ contract PaytalLisbon {
     function getPriceCombination(
         uint256 price,
         address account
-    ) public view returns(uint256[3] memory, bool success) {
-        // Tokens de usuario
+    ) public view returns(Coin[3] memory, bool success) {
+
+        Coin[3] memory _coinResult;
 
         uint256[3] memory result;
-        uint256 _tokenBalance;
+        uint256[3] memory _tokenBalances;
+        uint256 _balance;
         uint256 _totalAmount;
         uint256 _accum;
-        uint256 _unit;
+        uint256 _unit = 1e18;
 
         for (uint i=0; i < TOTAL_CURRENCIES; ++i) {
             Currency _currency = Currency(i);
-            _tokenBalance = IERC20(tokenAddress[_currency]).balanceOf(account);
+            _balance = IERC20(tokenAddress[_currency]).balanceOf(account);
+            uint256 _normBalance;
+
+            // TODO: Patching decimals for USDT
+            if (i == 0) {_normBalance = _balance * 1e12;} else {_normBalance = _balance;}
+
             // _decimals = IERC20(tokenAddress[_currency]).decimals();
             uint256 priceInUsd = IChronicle(chronicleOracleAddress[_currency]).read();
             // uint256 priceInUsd = TEST_DATA[i];
@@ -71,19 +76,12 @@ contract PaytalLisbon {
             console.log("ESTAMOS ACAA");
             console.log(i);
 
-            // TODO: Patching decimals for USDT
-            if (i == 0) {
-                _unit = 1_000_000;
-            } else {
-                _unit = 1e18;
-            }
-
-            console.log("priceInUsd Y _tokenBalance _unit");
+            console.log("priceInUsd Y _normBalance _unit");
             console.log(priceInUsd);
-            console.log(_tokenBalance);
+            console.log(_normBalance);
             console.log(_unit);
 
-            _totalAmount = priceInUsd * _tokenBalance / _unit;
+            _totalAmount = priceInUsd * _normBalance / 1e18;
             _accum += _totalAmount;
 
             console.log("ACCUM Y TOTAL AMOUNT");
@@ -91,19 +89,29 @@ contract PaytalLisbon {
             console.log(_totalAmount);
 
             if (_accum >= price) {
-                result[i] = _totalAmount - (_accum - price);
+                uint256 _valueInUsd = _totalAmount - (_accum - price);
+                result[i] = _valueInUsd;
+                uint256 value = (_valueInUsd * 1e18) / priceInUsd;
+                if (i == 0) { value = value / 1e12; }
+                _tokenBalances[i] = value;
+                _coinResult[i] = Coin(value, _valueInUsd);
                 console.log("por aquiA");
                 break;
             } else {
                 result[i] = _totalAmount;
+                if (i == 0) { _normBalance = _normBalance / 1e12; }
+                _tokenBalances[i] = _normBalance;
+                _coinResult[i] = Coin(_normBalance, _totalAmount);
                 console.log("por aca");
             }
         }
         console.log("RESULTS:");
-        console.log(result[0]);
-        console.log(result[1]);
-        console.log(result[2]);
+        console.log(result[0], _tokenBalances[0]);
+        console.log(result[1], _tokenBalances[1]);
+        console.log(result[2], _tokenBalances[2]);
+        console.log(_accum >= price);
 
-        return (result, _accum >= price);
+
+        return (_coinResult, _accum >= price);
     }
 }
