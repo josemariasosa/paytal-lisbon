@@ -1,6 +1,30 @@
-## PAYTAL
+# PAYTAL - Prototype
 
-Chronicles Oracles
+For ETH Lisbon 🚃 Nov 2023 Hackathon
+
+This contract helps a site discover user tokens and distribute a payment into multiple tokens. It leverages the prices feed from the `Chronicles` Oracle.
+
+**Product price**:
+
+```
+30 USDT
+```
+
+**User tokens in wallet**:
+
+```
+- 20 USDT
+- 0.001 ETH
+- 123 GNO
+```
+
+**Payment distribution** example:
+
+```
+- 20 USDT + 0.001 ET + 3 GNO == 30 USDT
+```
+
+User do not need to swap the tokens to pay in the same currency for a purchase.
 
 
 ```
